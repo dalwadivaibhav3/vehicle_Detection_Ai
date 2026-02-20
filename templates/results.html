@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+
+{% block title %}Results - Traffic Detection System{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- Back Button -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Video Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-video"></i> {{ video.video_name }}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Upload Time:</strong> {{ video.upload_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                            <p><strong>Processing Status:</strong>
+                                <span class="badge bg-success">{{ video.processing_status }}</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <p><strong>Processed At:</strong>
+                                {% if video.processed_at %}
+                                {{ video.processed_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                                {% else %}
+                                N/A
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Side-by-Side Video Boxes -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow h-100">
+                <div class="card-header bg-dark text-white text-center">
+                    <h5 class="mb-0"><i class="fas fa-video"></i> Original Input Video</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <video controls class="rounded-bottom">
+                            <source src="{{ url_for('static', filename='uploads/' + video.video_filename) }}"
+                                type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow h-100">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5 class="mb-0"><i class="fas fa-microchip"></i> AI Processed Output</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <video controls class="rounded-bottom">
+                            <source
+                                src="{{ url_for('static', filename='videos/processed_' + (video.video_id|string if video.video_id else video.id|string) + '.mp4') }}"
+                                type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vehicle Counts Summary -->
+    <div class="row mb-4">
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="card shadow-sm text-center vehicle-card bike-card">
+                <div class="card-body">
+                    <i class="fas fa-motorcycle fa-3x mb-2"></i>
+                    <h2 class="mb-0">{{ video.bike_count or 0 }}</h2>
+                    <p class="mb-0">Bikes</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="card shadow-sm text-center vehicle-card activa-card">
+                <div class="card-body">
+                    <i class="fas fa-moped fa-3x mb-2"></i>
+                    <h2 class="mb-0">{{ video.activa_count or 0 }}</h2>
+                    <p class="mb-0">Activa</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="card shadow-sm text-center vehicle-card car-card">
+                <div class="card-body">
+                    <i class="fas fa-car fa-3x mb-2"></i>
+                    <h2 class="mb-0">{{ video.car_count or 0 }}</h2>
+                    <p class="mb-0">Cars</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="card shadow-sm text-center vehicle-card bus-card">
+                <div class="card-body">
+                    <i class="fas fa-bus fa-3x mb-2"></i>
+                    <h2 class="mb-0">{{ video.bus_count or 0 }}</h2>
+                    <p class="mb-0">Buses</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="card shadow-sm text-center vehicle-card truck-card">
+                <div class="card-body">
+                    <i class="fas fa-truck fa-3x mb-2"></i>
+                    <h2 class="mb-0">{{ video.truck_count or 0 }}</h2>
+                    <p class="mb-0">Trucks</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="card shadow-sm text-center vehicle-card cycle-card">
+                <div class="card-body">
+                    <i class="fas fa-bicycle fa-3x mb-2"></i>
+                    <h2 class="mb-0">{{ video.cycle_count or 0 }}</h2>
+                    <p class="mb-0">Cycles</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="card shadow-sm text-center vehicle-card rickshaw-card">
+                <div class="card-body">
+                    <i class="fas fa-shuttle-van fa-3x mb-2"></i>
+                    <h2 class="mb-0">{{ video.rickshaw_count or 0 }}</h2>
+                    <p class="mb-0">Rickshaw</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4 col-6 mb-3">
+            <div class="card shadow-sm text-center vehicle-card total-card">
+                <div class="card-body">
+                    <i class="fas fa-calculator fa-3x mb-2"></i>
+                    <h2 class="mb-0">{{ video.total_count or 0 }}</h2>
+                    <p class="mb-0">Total</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Vehicle Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Vehicle Count Comparison</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-table"></i> Detailed Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Vehicle Type</th>
+                                    <th>Count</th>
+                                    <th>Percentage</th>
+                                    <th>Visual</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set total = video.total_count or 1 %}
+                                <tr>
+                                    <td><i class="fas fa-motorcycle text-primary"></i> Bikes</td>
+                                    <td>{{ video.bike_count or 0 }}</td>
+                                    <td>{{ "%.2f"|format((video.bike_count or 0) / total * 100) }}%</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-primary"
+                                                style="width: {{ (video.bike_count or 0) / total * 100 }}%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-moped text-info"></i> Activa</td>
+                                    <td>{{ video.activa_count or 0 }}</td>
+                                    <td>{{ "%.2f"|format((video.activa_count or 0) / total * 100) }}%</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-info"
+                                                style="width: {{ (video.activa_count or 0) / total * 100 }}%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-car text-success"></i> Cars</td>
+                                    <td>{{ video.car_count or 0 }}</td>
+                                    <td>{{ "%.2f"|format((video.car_count or 0) / total * 100) }}%</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success"
+                                                style="width: {{ (video.car_count or 0) / total * 100 }}%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-bus text-danger"></i> Buses</td>
+                                    <td>{{ video.bus_count or 0 }}</td>
+                                    <td>{{ "%.2f"|format((video.bus_count or 0) / total * 100) }}%</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-danger"
+                                                style="width: {{ (video.bus_count or 0) / total * 100 }}%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-truck text-warning"></i> Trucks</td>
+                                    <td>{{ video.truck_count or 0 }}</td>
+                                    <td>{{ "%.2f"|format((video.truck_count or 0) / total * 100) }}%</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-warning"
+                                                style="width: {{ (video.truck_count or 0) / total * 100 }}%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-bicycle text-secondary"></i> Cycles</td>
+                                    <td>{{ video.cycle_count or 0 }}</td>
+                                    <td>{{ "%.2f"|format((video.cycle_count or 0) / total * 100) }}%</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-secondary"
+                                                style="width: {{ (video.cycle_count or 0) / total * 100 }}%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-shuttle-van text-dark"></i> Rickshaw</td>
+                                    <td>{{ video.rickshaw_count or 0 }}</td>
+                                    <td>{{ "%.2f"|format((video.rickshaw_count or 0) / total * 100) }}%</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-dark"
+                                                style="width: {{ (video.rickshaw_count or 0) / total * 100 }}%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="table-primary fw-bold">
+                                    <td><i class="fas fa-calculator"></i> Total</td>
+                                    <td>{{ video.total_count or 0 }}</td>
+                                    <td>100.00%</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-primary" style="width: 100%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .vehicle-card {
+        transition: all 0.3s;
+        border-left: 5px solid;
+    }
+
+    .vehicle-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .bike-card {
+        border-left-color: #007bff;
+        color: #007bff;
+    }
+
+    .activa-card {
+        border-left-color: #17a2b8;
+        color: #17a2b8;
+    }
+
+    .car-card {
+        border-left-color: #28a745;
+        color: #28a745;
+    }
+
+    .bus-card {
+        border-left-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .truck-card {
+        border-left-color: #ffc107;
+        color: #ffc107;
+    }
+
+    .cycle-card {
+        border-left-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .rickshaw-card {
+        border-left-color: #343a40;
+        color: #343a40;
+    }
+
+    .total-card {
+        border-left-color: #000000;
+        color: #000000;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Vehicle data
+    const vehicleData = {
+        bike: {{ video.bike_count or 0 }},
+    activa: {{ video.activa_count or 0 }},
+    car: {{ video.car_count or 0 }},
+    bus: {{ video.bus_count or 0 }},
+    truck: {{ video.truck_count or 0 }},
+    cycle: {{ video.cycle_count or 0 }},
+    rickshaw: {{ video.rickshaw_count or 0 }}
+    };
+
+    // Pie Chart
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Bikes', 'Activa', 'Cars', 'Buses', 'Trucks', 'Cycles', 'Rickshaws'],
+            datasets: [{
+                data: [
+                    vehicleData.bike,
+                    vehicleData.activa,
+                    vehicleData.car,
+                    vehicleData.bus,
+                    vehicleData.truck,
+                    vehicleData.cycle,
+                    vehicleData.rickshaw
+                ],
+                backgroundColor: ['#007bff', '#17a2b8', '#28a745', '#dc3545', '#ffc107', '#6c757d', '#343a40']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // Bar Chart
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Bikes', 'Activa', 'Cars', 'Buses', 'Trucks', 'Cycles', 'Rickshaws'],
+            datasets: [{
+                label: 'Vehicle Count',
+                data: [
+                    vehicleData.bike,
+                    vehicleData.activa,
+                    vehicleData.car,
+                    vehicleData.bus,
+                    vehicleData.truck,
+                    vehicleData.cycle,
+                    vehicleData.rickshaw
+                ],
+                backgroundColor: ['#007bff', '#17a2b8', '#28a745', '#dc3545', '#ffc107', '#6c757d', '#343a40']
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+{% endblock %}

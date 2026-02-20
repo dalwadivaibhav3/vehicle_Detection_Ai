@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Traffic Detection System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3><i class="fas fa-sign-in-alt"></i> Login</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('login') }}">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                <i class="fas fa-user"></i> Username
+                            </label>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   placeholder="Enter username" required autofocus>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   placeholder="Enter password" required>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <p class="mb-0">Don't have an account? 
+                            <a href="{{ url_for('register') }}" class="text-decoration-none">
+                                Register here
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Info -->
+            <div class="card mt-4 shadow">
+                <div class="card-body text-center">
+                    <h5><i class="fas fa-info-circle"></i> About System</h5>
+                    <p class="text-muted mb-0">
+                        AI-powered traffic vehicle detection and counting system using YOLOv8
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+    
+    .card {
+        border-radius: 15px;
+        border: none;
+    }
+    
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+    }
+</style>
+{% endblock %}
